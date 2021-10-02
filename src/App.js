@@ -20,18 +20,25 @@ function App() {
 
     // GET Tasks
     const fetchTasks = async () => {
-        const res = await fetch(tasksEndpoint)
-        const data = await res.json()
+        const resp = await fetch(tasksEndpoint)
+        const data = await resp.json()
 
         return data
     }
 
-    // Add Task
-    const addTask = (task) => {
-        // Not a guaranteed solution for ID!!!
-        const id = Math.floor(Math.random() * 10000) + 1
-        const newTask = { id, ...task }
-        setTasks([...tasks, newTask])
+    // POST Task
+    const addTask = async (task) => {
+        const resp = await fetch(tasksEndpoint, { 
+            method: 'POST',
+            headers: {
+                'Content-type': 'application/json'
+            },
+            body: JSON.stringify(task)
+        })
+
+        const data = await resp.json()
+
+        setTasks([...tasks, data])
     }
 
     // DELETE Task
