@@ -7,6 +7,8 @@ function App() {
     const [showAddTask, setShowAddTask] = useState(false)
     const [tasks, setTasks] = useState([])
 
+    const tasksEndpoint = 'http://localhost:5050/tasks';
+
     useEffect(() => {
         const getTasks = async () => {
             const tasksFromServer = await fetchTasks()
@@ -16,9 +18,9 @@ function App() {
         getTasks()
     }, [])
 
-    // Fetch Tasks
+    // GET Tasks
     const fetchTasks = async () => {
-        const res = await fetch('http://localhost:5050/tasks')
+        const res = await fetch(tasksEndpoint)
         const data = await res.json()
 
         return data
@@ -32,8 +34,9 @@ function App() {
         setTasks([...tasks, newTask])
     }
 
-    // Delete Task
-    const deleteTask = (id) => {
+    // DELETE Task
+    const deleteTask = async (id) => {
+        await fetch(`${tasksEndpoint}/${id}`, { method: 'DELETE' })
         setTasks(tasks.filter((task) => task.id !== id))
     }
 
